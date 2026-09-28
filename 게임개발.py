@@ -1,42 +1,61 @@
-n,m=int(input().split())
-first_position=list(map(int,lnput().split()))
-direction=int(input())
-game_map=[]
+문제:게임개발
+풀이:첫 시도에는 동,서,남,북 각각 바라보는 방향 따라서 함수를 선언해서 풀어보려 함 ->너무 복잡 
+그래서 왼쪽으로 돌아보는 함수를 만들고 이동과 후진은 따로 만들어놓아서 해결했음
+
+
+
+n, m = map(int, input().split())  # 맵 크기 N, M
+position_x, position_y, direction = map(int, input().split())  # X, Y, 방향 한 번에 입력
+position = [position_x, position_y]
+
+game_map = []
 for _ in range(n):
-    game_map.append(list(map(int,input().split()))) #[[1,1,1,1]
-count=0                                               [1,0,0,1]
-move_num=0                                            [1,1,0,1]
-                                                      [1,1,1,1]]
+    game_map.append(list(map(int, input().split())))
 
 visited = [[False] * m for _ in range(n)]
-def move_east(posi,direc):
-    #동쪽을 바라보는 기준
-    if(count<4):
-        count+=1
-    else: #4방향 모두 살펴본 경우
-        if(game_map[posi[0]][posi[1]-1]==1): #뒤가 바다라면
-            print(move_num) #이동횟수 출력,마무리
-        elif(game_map[posi[0]][posi[1]-1]==0): # 뒤가 육지라면
-            position=[posi[0]][posi[1]-1] #뒤로이동
-            if(visited[posi[0]][posi[1]-1]==False): #이동한 곳이 가보지않은곳이라면
-                visited[posi[0]][posi[1]-1]=True #가본곳으로하고
-                move_num+=1                #이동횟수 늘리고
-            move_east(position,1) #바라보는 방향유지,위치만 변경해서 다시 시작
-            
-    if(visited[posi[0]-1][posi[1]]==Flase and
-       game_map[posi[0]-1][posi[1]]==0 ):,가보지않았고 육지라면
-        visited[posi[0]-1][posi[1]]==True #
-        posi=[posi[0]-1][posi[1]] #위치 옮기고
-        direc=0 #시선 옮기고
-        move_num+=1
-        move_north(posi,0) #옮긴 시선 기준으로 다시 함수호출
-        
-    elif(visited[posi[0]-1][posi[1]]==True or
-        game_map[posi[0]-1][posi[1]]==1): #가보거나 바다라면
-        direc=0 #시선만 옮기고
-        move_north(posi,direc) 함수 호출
-        
+visited[position[0]][position[1]] = True  # 첫 위치 방문 처리
 
-    game_map[position[0]][position[1]-1] #왼쪽보기
-    game_map[position[0]+1][position[1]] #아래보기
-    game_map[position[0]][position[1]+1] #오른쪽보기
+count = 0
+move_num = 1  # 첫 위치 포함
+
+dx = [-1, 0, 1, 0]  # 북, 동, 남, 서
+dy = [0, 1, 0, -1]
+
+def turn_left():
+    global direction
+    direction -= 1
+    if direction == -1:
+        direction = 3
+
+# while (count != 4) 대신 while True 사용
+while True:
+    turn_left()
+    count += 1
+    
+    position_x = position[0] + dx[direction]
+    position_y = position[1] + dy[direction]
+    
+    # 이동 가능 (육지이고 방문 안 함)
+    if game_map[position_x][position_y] == 0 and not visited[position_x][position_y]:
+        position[0] = position_x
+        position[1] = position_y
+        visited[position_x][position_y] = True
+        count = 0
+        move_num += 1
+        continue
+    
+    # 4방향 모두 갈 수 없는 경우 후진 시도
+    if count == 4:
+        move_back = (direction + 2) % 4
+        back_x = position[0] + dx[move_back]
+        back_y = position[1] + dy[move_back]
+        
+        # 뒤가 육지라면 후진
+        if game_map[back_x][back_y] == 0:
+            position[0] = back_x
+            position[1] = back_y
+            count = 0  # 4방향 확인 카운트 리셋
+        # 뒤가 바다라면 게임 종료
+        else:
+            print(move_num)
+            break
