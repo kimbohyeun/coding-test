@@ -1,0 +1,31 @@
+유형분석: 최소거리/최단/물 뿌리듯 풀면 되므로 bfs
+풀이: 아직 잘 이해 못함 다음에 한번 더 하기로
+from collections import deque #큐 구현 위해서 임포트
+
+N,M=map(int,input().split())
+graph=[list(map(int,input())) for _ in range(N)]
+
+distance = [[0] * M for _ in range(N)]
+
+# 2. 큐 생성 및 시작점 삽입 (시작점 거리 = 1)
+queue = deque([(0, 0)]) # (행, 열) Coordinates
+distance[0][0] = 1
+
+# 3. BFS 실행
+while queue:
+    r, c = queue.popleft() # 큐의 맨 앞에서 현재 위치를 꺼냄
+    
+    # 상, 하, 좌, 우 4방향 이동
+    for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+        nr, nc = r + dr, c + dc
+        
+        # 미로 범위 내에 있고, 벽이 아니며, 아직 방문하지 않은 곳이라면
+        if 0 <= nr < N and 0 <= nc < M and graph[nr][nc] == 1:
+            if distance[nr][nc] == 0: # 아직 방문 안 함
+                
+                # 핵심: [다음 위치 거리] = [현재 위치 거리] + 1
+                distance[nr][nc] = distance[r][c] + 1
+                
+                # 거리가 1 늘어난 다음 노드를 큐 뒤에 넣음
+                queue.append((nr, nc))
+print(distance[N-1][M-1])
