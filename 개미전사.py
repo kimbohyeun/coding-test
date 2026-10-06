@@ -24,3 +24,30 @@ for i in food_warehouse[3:]:
 print(strategy[choosen_number])
 
 홀수배열만 가져가거나 짝수배열만 가져가거나를 선택하게하는 조건임 단 10 1 1 10처럼 그런 경우가 아닌경우가 존재해서 틀림
+
+풀이:최선의 선택지를 가져가다가 지금의 최선의 선택지와 이전의 최선의 선택지를 비교한 이후에 선택, 만약 지금의 최선의 선택지를 선택했다면
+그 이전이전의 최선의 선택지를 가져오도록 만듦, 각각의 최선의 수를 리스트에 저장해서 다이나믹 형식으로 만듦
+num=int(input())
+food_warehouse=list(map(int,input().split()))
+strategy=[0]*num
+strategy[0]=food_warehouse[0]
+count=0
+if(food_warehouse[0]>=food_warehouse[1]):
+    strategy[1]=strategy[0]
+    count=0
+else:
+    strategy[1]=food_warehouse[1]
+    count=1
+for i in range(2,num):           
+    if(count==(i-1)): #연속해서 2개일떄 #i=2부터시작
+        if(strategy[count]<strategy[count-1]+food_warehouse[i]):
+            strategy[i]=strategy[count-1]+food_warehouse[i]
+            count=i
+        else: #채택되지않음
+            strategy[i]=strategy[count]
+    else: #연속하지 않아서 무조건 하는게 이득인상황
+        strategy[i]=strategy[count]+food_warehouse[i]
+        count=i
+
+print(strategy[count])
+            
