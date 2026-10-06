@@ -50,4 +50,24 @@ for i in range(2,num):
         count=i
 
 print(strategy[count])
-            
+
+정답풀이:
+num = int(input())
+food_warehouse = list(map(int, input().split()))
+
+# DP 테이블(기록용) 생성
+strategy = [0] * num
+
+# 베이스 케이스 설정
+strategy[0] = food_warehouse[0]
+strategy[1] = max(food_warehouse[0], food_warehouse[1])
+
+# i번째 창고를 털지 말지 결정 (count 변수 불필요)
+for i in range(2, num):
+    # strategy[i - 1] : 현재 창고를 안 터는 경우 (이전 최선 유지)
+    # strategy[i - 2] + food_warehouse[i] : 현재 창고를 터는 경우 (이전이전 최선 + 현재 식량)
+    strategy[i] = max(strategy[i - 1], strategy[i - 2] + food_warehouse[i])
+
+# 모든 창고를 고려했을 때의 최종 최댓값 출력
+print(strategy[num - 1])
+max,min..  이것을 더 제대로 활용해야할듯
