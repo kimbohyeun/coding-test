@@ -1,0 +1,30 @@
+string=input()
+seperated_string=len(string)//2
+dict={}
+key=[]
+result=[]
+in_dict=[]
+min_dict=1000
+#x abcd abcd
+for distance in range(1,seperated_string+1):
+    for sr in range(len(string)):
+        if(string[sr:sr+distance] not in dict):
+            dict[string[sr:sr+distance]]=1
+            key.append(string[sr:sr+distance])
+        else:
+            dict[string[sr:sr+distance]]+=1
+    for i in range(len(dict)):
+        if(max(dict)==dict[key[i]]):
+            result.append(dict[key[i]]+key[i])
+            in_dict.append(dict[key[i]])
+    for j in dict:
+        if(j!=in_dict):
+            result.append(dict[j])
+    if(min_dict > len(result)):
+        min_dict=len(result)
+        dict.clear()
+        key.clear()
+        result.clear()
+        in_dict.clear()
+print(min_dict)
+print(result)
