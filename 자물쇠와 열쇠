@@ -1,0 +1,38 @@
+key=[[0,0,0],[1,0,0],[0,1,1]]
+lock=[[1,1,1],[1,1,0],[1,0,1]]
+n=len(key)
+big_key=[[0]*3*n for _ in range(3*n)]
+N=len(big_key)
+for i in range(n):
+    for j in range(n):
+        if(key[i][j]!=big_key[i][j]):
+            big_key[i][j]=1
+
+for i in range(n):
+    for j in range(n):
+        
+
+'''
+key  0 0 0
+     1 0 0
+     0 1 1 
+
+lock 1 1 1 
+     1 1 0
+     1 0 1
+
+     0 0 0 
+     0 0 0
+     0 0 0
+
+
+'''
+
+def spin90(key): #90도 시계방향 회전하는 함수
+    n=len(key)
+    new_key=[[0]*n for _ in range(n)]
+    for column in range(n):
+        for row in range(n):
+            new_key[row][n-1-column]=key[column][row]
+    return new_key
+    
